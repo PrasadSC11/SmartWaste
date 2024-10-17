@@ -1,0 +1,71 @@
+<div class="container">
+  <h2 class="my-4 text-center">{{ editmode ? 'Edit Route' : 'Create New Route' }}</h2>
+  <button (click)="editmode ? cancelEdit() : editmode = true" class="btn btn-primary mb-3">
+    {{ editmode ? 'Back' : 'Edit Route' }}
+  </button>
+  <div *ngIf="editmode">
+    <div class="form-group mb-3">
+      <label for="routeSelect">Select Route to Edit</label>
+      <select id="routeSelect" class="form-control" [(ngModel)]="selectedRouteId">
+        <option value="" disabled selected>Select a route</option>
+        <option *ngFor="let route of routesList" [value]="route.routeId">
+          {{ route.startingPoint }} - {{ route.endingPoint }}
+        </option>
+      </select>
+    </div><button class="btn btn-primary" (click)="loadRouteForEdit()" [disabled]="!selectedRouteId">
+      Load
+    </button>
+  </div>
+  <form [formGroup]="routeForm" *ngIf="!editmode || editingRouteId" (ngSubmit)="submitRoute()">
+    <div class="form-group mb-3">
+      <label for="startingPoint">Starting Point</label>
+      <input type="text" id="startingPoint" class="form-control" formControlName="startingPoint">
+      <div *ngIf="routeForm.get('startingPoint')?.invalid && routeForm.get('startingPoint')?.touched"
+        class="text-danger">
+        Starting point is required.
+      </div>
+    </div>
+    <div class="form-group mb-3">
+      <label for="endingPoint">Ending Point</label>
+      <input type="text" id="endingPoint" class="form-control" formControlName="endingPoint">
+      <div *ngIf="routeForm.get('endingPoint')?.invalid && routeForm.get('endingPoint')?.touched" class="text-danger">
+        Ending point is required.
+      </div>
+    </div>
+    <div formArrayName="stops" class="row mb-3">
+      <div class="col-md-6">
+        <div *ngFor="let stop of stops.controls; let i = index" [formGroupName]="i" class="mb-2">
+          <label for="stop-{{i}}">Stop {{i + 1}}</label>
+          <select id="stop-{{i}}" class="form-control" (change)="onStopSelect($event, i)">
+            <option value="" disabled selected>Select a stop</option>
+            <option *ngFor="let stopObj of stopsList" [value]="stopObj.area" [disabled]="isStopDisabled(stopObj.area)">
+              {{ stopObj.area }}
+            </option>
+          </select>
+          <div *ngIf="stop.get('area')?.invalid && stop.get('area')?.touched" class="text-danger">Stop is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 d-flex align-items-end">
+        <button type="button" class="btn btn-primary me-2" (click)="addStop()">
+          <i class="bi bi-plus-circle"></i> Stop
+        </button>
+        <button type="button" class="btn btn-danger" (click)="removeLastStop()">
+          <i class="bi bi-dash-circle"></i> Stop
+        </button>
+      </div>
+    </div>
+    <div class="form-group mt-3">
+      <button type="submit" class="btn btn-success" [disabled]="isLoading">
+        {{ editingRouteId ? 'Update Route' : 'Create Route' }}
+      </button>
+    </div>
+  </form>
+  <div *ngIf="submissionMessage" class="alert alert-info mt-3">
+    {{ submissionMessage }}
+  </div>
+  <div *ngIf="isLoading" class="spinner-border mt-3" role="status">
+    <span class="sr-only"></span>
+  </div>
+</div>

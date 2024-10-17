@@ -1,0 +1,18 @@
+.dropdown-menu {
+    margin-top: 0.5rem; /* Adjust margin for floating effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+  }
+  
+  .dropdown-item {
+    padding: 10px 20px; /* Add padding for better clickability */
+    transition: background-color 0.2s; /* Smooth transition */
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f8f9fa; /* Light background on hover */
+  }
+  
+  .dropdown-toggle::after {
+    display: none; /* Remove the default caret for a cleaner look */
+  }
+  

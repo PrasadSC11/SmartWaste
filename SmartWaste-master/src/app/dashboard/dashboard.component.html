@@ -1,0 +1,33 @@
+<!-- <div class="container"> -->
+  <div class="text-center mb-3">
+    <button (click)="switchData('weekly')" class="btn btn-primary me-2">Weekly</button>
+    <button (click)="switchData('monthly')" class="btn btn-primary">Monthly</button>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">User Data</h5> -->
+          <div [chart]="userPieChart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">Waste Picker Data</h5> -->
+          <div [chart]="wastePickerChart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">Driver Data</h5> -->
+          <div [chart]="driverPieChart"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- </div> -->

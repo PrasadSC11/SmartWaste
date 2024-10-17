@@ -1,0 +1,96 @@
+<div class="container">
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search by Driver RFID" [(ngModel)]="searchRfid" />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="searchDriver()">Search</button>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <div *ngIf="validationMessage" class="alert alert-danger">
+          <strong>{{ validationMessage }}</strong>
+        </div>
+        
+        <div *ngIf="selectedDriver" style="cursor: pointer;" (click)="onDriverSelected(selectedDriver)" class="border rounded p-3 bg-light">
+          <p><strong>RFID:</strong> {{ selectedDriver.rf_id }}</p>
+          <p><strong>Name:</strong> {{ selectedDriver.username }}</p>
+          <p><strong>Email:</strong> {{ selectedDriver.email }}</p>
+          <p><strong>Contact:</strong> {{ selectedDriver.contact }}</p>
+          <p><strong>Assigned Route:</strong> {{ selectedDriver.assignedRoute }}</p>
+        </div>
+        <div *ngIf="!selectedDriver && !validationMessage" class="alert alert-warning mt-2">
+          <strong>No driver found. Please enter a valid RFID.</strong>
+        </div>
+      </div>
+  
+      <div class="col-md-6 d-flex justify-content-center align-items-start">
+        <div *ngIf="driverChart" class="w-100">
+          <div [chart]="driverChart" class="chart-container"></div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal for showing selected driver details -->
+    <div class="modal fade" id="selectedDriverModal" tabindex="-1" aria-labelledby="selectedDriverModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="selectedDriverModalLabel">Driver Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <p><strong>RFID:</strong> {{ selectedDriver?.rf_id }}</p>
+                <p><strong>Username:</strong> {{ selectedDriver?.username }}</p>
+              </div>
+              <div class="col-md-6">
+                <p><strong>Email:</strong> {{ selectedDriver?.email }}</p>
+                <p><strong>Contact:</strong> {{ selectedDriver?.contact }}</p>
+              </div>
+            </div>
+            <p><strong>Current Route:</strong> {{ selectedDriver?.assignedRoute }}</p>
+  
+            <div class="dropdown mb-3">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="routeDropdown1" data-bs-toggle="dropdown" aria-expanded="false">
+                {{ selectedRoute ? selectedRoute.startingPoint + ' to ' + selectedRoute.endingPoint : 'Assign Route' }}
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="routeDropdown1">
+                <li *ngFor="let route of routesList" (click)="selectRoute(route)">
+                  <a class="dropdown-item">{{ route.startingPoint }} to {{ route.endingPoint }}</a>
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="selectedRoute">
+              <p><strong>Route ID:</strong> {{ selectedRoute.routeId }}</p>
+              <p><strong>Route:</strong> {{ selectedRoute.startingPoint }} to {{ selectedRoute.endingPoint }}</p>
+              <hr>
+              <h6>Stop Details:</h6>
+              <div class="mt-4" *ngFor="let stop of selectedRoute.stops">
+                <div class="row">
+                  <p><strong>Area:</strong> {{ stop.area }}</p>
+                  <div class="col-md-6">
+                    <p><strong>Latitude:</strong> {{ stop.lat }}</p>
+                    <p><strong>Longitude:</strong> {{ stop.lon }}</p>
+                  </div>
+                  <div class="col-md-6">
+                    <p><strong>Dry Waste Quantity:</strong> {{ stop.dry }} kg</p>
+                    <p><strong>Wet Waste Quantity:</strong> {{ stop.wet }} kg</p>
+                  </div>
+                </div>
+                <hr>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="assignRoute()">Assign</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

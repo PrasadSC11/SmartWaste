@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top">
+  <div class="container-fluid flex-wrap">
+    <a class="navbar-brand">Dashboard</a>
+    <button class="navbar-toggler" type="button" (click)="toggleMenu()" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse flex-wrap" [ngClass]="{'show': isMenuOpen}">
+      <div class="navbar-nav d-flex align-items-center">
+        <button class="nav-link btn" aria-current="page" (click)="toggle(0)">Home</button>
+        <div class="nav-item dropdown">
+          <button class="nav-link btn dropdown-toggle" type="button" id="driverDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Driver
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="driverDropdown">
+            <li><a class="dropdown-item" (click)="toggle(1)">Driver List</a></li>
+            <li><a class="dropdown-item" (click)="toggle(4)">New Route</a></li>
+          </ul>
+        </div>
+
+        <button class="nav-link btn" (click)="toggle(2)">User</button>
+        <button class="nav-link btn" (click)="toggle(3)">Waste Picker</button>
+
+        <div class="nav-item dropdown">
+          <button class="nav-link btn dropdown-toggle" type="button" id="complaintsDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Complaints
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="complaintsDropdown">
+            <li><a class="dropdown-item" (click)="toggle(7)">User</a></li>
+            <li><a class="dropdown-item" (click)="toggle(5)">Driver</a></li>
+            <li><a class="dropdown-item" (click)="toggle(6)">WastePicker</a></li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="isMenuOpen" class="navbar-nav d-flex align-items-center ms-auto">
+        <button class="nav-link btn" (click)="toggleMenu()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div>
+  <div *ngIf="whatToShow == 0">
+    <app-dashboard></app-dashboard>
+  </div>
+  <div *ngIf="whatToShow == 1">
+    <app-driver></app-driver>
+  </div>
+  <div *ngIf="whatToShow == 2">
+    <app-user></app-user>
+  </div>
+  <div *ngIf="whatToShow == 3">
+    <app-wastepicker></app-wastepicker>
+  </div>
+  <div *ngIf="whatToShow == 4">
+    <app-newroute></app-newroute>
+  </div>
+  <div *ngIf="whatToShow == 5">
+    <app-complaints [toggle1]="toggle1"></app-complaints>
+  </div>
+  <div *ngIf="whatToShow == 6">
+    <app-complaints [toggle1]="toggle1"></app-complaints>
+  </div>
+  <div *ngIf="whatToShow == 7">
+    <app-complaints [toggle1]="toggle1"></app-complaints>
+  </div>
+</div>

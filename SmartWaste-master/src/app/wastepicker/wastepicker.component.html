@@ -1,0 +1,31 @@
+<div class="container">
+  <div *ngIf="wastePickersList.length > 0">
+    <app-wastepicker-pie-chart [wastePickersList]="wastePickersList"></app-wastepicker-pie-chart>
+  </div>
+
+  <h2 class="my-4 text-center">List of Waste Pickers</h2>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>RFID</th>
+          <th>Current Area</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of wastePickersList">
+          <td>{{ data.rf_id }}</td>
+          <td>{{ data.area }}</td>
+          <td>{{ data.username }}</td>
+          <td>{{ data.email }}</td>
+          <td>{{ data.contact }}</td>
+          <td>{{ data.address1 }} {{ data.address2 }} {{ data.pincode }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> 

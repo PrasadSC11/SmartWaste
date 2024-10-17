@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Search by RFID" [(ngModel)]="searchRfid" />
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" (click)="searchUser()">Search</button>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <div *ngIf="validationMessage" class="alert alert-danger">
+          <strong>{{ validationMessage }}</strong>
+        </div>
+  
+        <div *ngIf="selectedUser" class="border rounded p-3 bg-light">
+          <h5 class="text-primary">User Details</h5>
+          <p><strong>RFID:</strong> {{ selectedUser.rf_id }}</p>
+          <p><strong>Name:</strong> {{ selectedUser.username }}</p>
+          <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+          <p><strong>Contact:</strong> {{ selectedUser.contact }}</p>
+          <p><strong>Area:</strong> {{ selectedUser.area }}</p>
+        </div>
+  
+        <div *ngIf="!selectedUser && !validationMessage" class="alert alert-warning mt-2">
+          <strong>No user found. Please enter a valid RFID.</strong>
+        </div>
+      </div>
+  
+      <div class="col-md-6 d-flex justify-content-center align-items-start">
+        <div *ngIf="chart" class="w-100">
+          <div [chart]="chart" class="chart-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

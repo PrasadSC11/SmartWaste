@@ -1,0 +1,29 @@
+<div *ngIf="userlist.length > 0">
+  <app-user-pie-chart [userlist]="userlist"></app-user-pie-chart>
+</div>
+
+<h2 class="my-4 text-center">List of Users</h2>
+<div class="table-responsive">
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>RFID</th>
+        <th>Area</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Contact</th>
+        <th>Address</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of userlist" style="cursor: pointer;">
+        <td>{{ user.rf_id }}</td>
+        <td>{{ user.area }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.contact }}</td>
+        <td>{{ user.address1 }},{{ user.address2 }},{{ user.pincode }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

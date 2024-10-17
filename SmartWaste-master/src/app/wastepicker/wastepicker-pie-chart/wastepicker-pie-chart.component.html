@@ -1,0 +1,79 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Search by RFID" [(ngModel)]="searchRfid" aria-label="Search by RFID" />
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100" (click)="searchUser()">Search</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div *ngIf="validationMessage" class="alert alert-danger">
+        <strong>{{ validationMessage }}</strong>
+      </div>
+
+      <div *ngIf="selectedUser" class="border rounded p-3 bg-light" style="cursor: pointer;" (click)="openModal(selectedUser)">
+        <h5 class="text-primary">WastePicker Details</h5>
+        <p><strong>RFID:</strong> {{ selectedUser.rf_id }}</p>
+        <p><strong>Name:</strong> {{ selectedUser.username }}</p>
+        <p><strong>Email:</strong> {{ selectedUser.email }}</p>
+        <p><strong>Contact:</strong> {{ selectedUser.contact }}</p>
+        <p><strong>Area:</strong> {{ selectedUser.area }}</p>
+      </div>
+
+      <div *ngIf="!selectedUser && !validationMessage" class="alert alert-warning mt-2">
+        <strong>No user found. Please enter a valid RFID.</strong>
+      </div>
+    </div>
+
+    <div class="col-md-6 d-flex justify-content-center align-items-start">
+      <div *ngIf="chart" class="w-100">
+        <div [chart]="chart" class="chart-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="wastePickerModal" tabindex="-1" aria-labelledby="wastePickerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="wastePickerModalLabel">Waste Picker Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>RFID:</strong> {{ selectedWastePicker?.rf_id }}</p>
+            <p><strong>Username:</strong> {{ selectedWastePicker?.username }}</p>
+            <p><strong>Current Area:</strong> {{ selectedWastePicker?.area }}</p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Email:</strong> {{ selectedWastePicker?.email }}</p>
+            <p><strong>Contact:</strong> {{ selectedWastePicker?.contact }}</p>
+          </div>
+        </div>
+
+        <div class="dropdown mb-3">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="areaDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Area
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="areaDropdown">
+            <li *ngFor="let area of areaList" (click)="selectArea(area)">
+              <a class="dropdown-item">{{ area.area }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <p *ngIf="selectedArea"><strong>Selected Area:</strong> {{ selectedArea?.area }}</p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="assignArea()">Assign</button>
+      </div>
+    </div>
+  </div>
+</div>
