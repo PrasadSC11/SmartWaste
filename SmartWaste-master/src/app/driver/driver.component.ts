@@ -12,9 +12,7 @@ export class DriverComponent implements OnInit {
   driversList: any = [];
 
   constructor(
-    private app: AppComponent,
-    private driverService: DriverService
-  ) {
+    private app: AppComponent, private driverService: DriverService) {
   }
 
   ngOnInit(): void {

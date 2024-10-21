@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"style="margin-top: 20px;">
   <div class="row mb-4">
     <div class="col-md-4">
       <input type="text" class="form-control" placeholder="Search by RFID" [(ngModel)]="searchRfid" aria-label="Search by RFID" />
@@ -20,7 +20,7 @@
         <p><strong>Name:</strong> {{ selectedUser.username }}</p>
         <p><strong>Email:</strong> {{ selectedUser.email }}</p>
         <p><strong>Contact:</strong> {{ selectedUser.contact }}</p>
-        <p><strong>Area:</strong> {{ selectedUser.area }}</p>
+        <p><strong>Assigned Area:</strong> {{ selectedUser.area }}</p>
       </div>
 
       <div *ngIf="!selectedUser && !validationMessage" class="alert alert-warning mt-2">

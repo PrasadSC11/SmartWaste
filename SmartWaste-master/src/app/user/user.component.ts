@@ -22,8 +22,6 @@ export class UserComponent implements OnInit {
   userlist: User[] = [];
   selectedUser: User | null = null;
 
-  @ViewChild('userModal') userModal: any;
-
   constructor(
     private http: HttpClient,
     private app: AppComponent

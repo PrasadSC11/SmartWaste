@@ -31,7 +31,7 @@ export class DriverPieChartComponent implements OnChanges {
   driverChart!: Chart;
   routesList: any;
   selectedRoute: any;
-  validationMessage: string = ''; // To store validation messages
+  validationMessage: string = '';
 
   constructor(private http: HttpClient, private app: AppComponent, @Inject(PLATFORM_ID) private platformId: Object) {
     this.loadDriverData();
@@ -91,7 +91,7 @@ export class DriverPieChartComponent implements OnChanges {
   }
 
   searchDriver() {
-    this.validationMessage = ''; // Clear any previous validation message
+    this.validationMessage = '';
 
     if (!this.searchRfid) {
       this.validationMessage = 'RFID cannot be empty.';
@@ -108,7 +108,6 @@ export class DriverPieChartComponent implements OnChanges {
   onDriverSelected(driver: Driver) {
     this.selectedDriver = driver;
 
-    // Ensure the modal is opened after DOM is rendered
     if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => {
         const modalElement = document.getElementById('selectedDriverModal');
@@ -116,7 +115,7 @@ export class DriverPieChartComponent implements OnChanges {
           const modal = new bootstrap.Modal(modalElement);
           modal.show();
         }
-      }, 0); // This ensures the DOM is fully updated
+      }, 0);
     }
   }
 

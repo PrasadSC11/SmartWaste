@@ -28,7 +28,7 @@ export class DashboardComponent {
     this.http.get(driverUrl).subscribe({
       next: (driverData: any) => {
         const driverWasteData = this.groupDataById(driverData);
-        this.driverPieChart = this.createPieChart(driverWasteData, `Drivers`);
+        this.driverPieChart = this.createPieChart(driverWasteData, `Driver Data`);
       },
       error: (err) => console.error('Error fetching driver data', err)
     });
@@ -36,7 +36,7 @@ export class DashboardComponent {
     this.http.get(userUrl).subscribe({
       next: (userData: any) => {
         const userWasteData = this.groupDataById(userData);
-        this.userPieChart = this.createPieChart(userWasteData, `Users`);
+        this.userPieChart = this.createPieChart(userWasteData, `User Data`);
       },
       error: (err) => console.error('Error fetching user data', err)
     });
@@ -44,7 +44,7 @@ export class DashboardComponent {
     this.http.get(wastePickerUrl).subscribe({
       next: (wastePickerData: any) => {
         const wastePickerChart = this.groupDataById(wastePickerData);
-        this.wastePickerChart = this.createPieChart(wastePickerChart, `WastePickers`);
+        this.wastePickerChart = this.createPieChart(wastePickerChart, `WastePicker Data`);
       },
       error: (err) => console.error('Error fetching waste picker data', err)
     });
@@ -78,18 +78,18 @@ export class DashboardComponent {
       // credits: {
       //   enabled: false,
       // },
-      // plotOptions: {
-      //   pie: {
-      //     innerSize: '90%',
-      //     borderWidth: 2,
-      //     dataLabels: {
-      //       format: '{point.name}',
-      //       distance: 1,
-      //       style: {
-      //         fontSize: '12px'
-      //       }
-      //     },
-      //   },
+      plotOptions: {
+        pie: {
+          //     innerSize: '90%',
+          //     borderWidth: 2,
+          dataLabels: {
+            //       format: '{point.name}',
+            distance: 5,
+            //       style: {
+            //         fontSize: '12px'
+          }
+        },
+      },
       // },
       title: {
         text: title,
