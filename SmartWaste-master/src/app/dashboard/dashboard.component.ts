@@ -17,6 +17,7 @@ export class DashboardComponent {
   constructor(private http: HttpClient, private app: AppComponent) {
     this.loadDriverAndUserData("monthly");
   }
+  
   switchData(viewType: string) {
     this.loadDriverAndUserData(viewType);
   }
