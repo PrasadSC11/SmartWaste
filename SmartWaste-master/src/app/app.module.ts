@@ -15,6 +15,7 @@ import { UserPieChartComponent } from './user/user-pie-chart/user-pie-chart.comp
 import { DriverPieChartComponent } from './driver/driver-pie-chart/driver-pie-chart.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { WastepickerPieChartComponent } from './wastepicker/wastepicker-pie-chart/wastepicker-pie-chart.component';
+import { NewAreaComponent } from './user/new-area/new-area.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { WastepickerPieChartComponent } from './wastepicker/wastepicker-pie-char
     UserPieChartComponent,
     DriverPieChartComponent,
     WastepickerPieChartComponent,
+    NewAreaComponent,
   ],
   imports: [
     BrowserModule,

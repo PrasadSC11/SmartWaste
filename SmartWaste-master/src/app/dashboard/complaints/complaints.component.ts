@@ -15,12 +15,14 @@ export class ComplaintsComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.toggle1) {
+      console.log(this.toggle1);
       this.loadComplaints();
     }
   }
 
   loadComplaints() {
     let url = '';
+
     if (this.toggle1 == 5) {
       url = `${this.app.baseUrl}getDriverComplaints`;
     } else if (this.toggle1 == 6) {

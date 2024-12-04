@@ -1,28 +1,36 @@
-<div *ngIf="driversList.length > 0">
-  <app-driver-pie-chart [driverlist]="driversList"></app-driver-pie-chart>
-</div>
-<h2 class="my-4 text-center">List of Drivers</h2>
-<div class="table-responsive">
-  <table class="table table-striped table-bordered table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>RFID</th>
-        <th>Current Route</th>
-        <th>Username</th>
-        <th>Email</th>
-        <th>Contact</th>
-        <th>Address</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let driver of driversList">
-        <td>{{ driver.rf_id }}</td>
-        <td>{{ driver.assignedRoute }}</td>
-        <td>{{ driver.username }}</td>
-        <td>{{ driver.email }}</td>
-        <td>{{ driver.contact }}</td>
-        <td>{{ driver.address1 }},{{ driver.address2 }}, {{ driver.pincode }}</td>
-      </tr>
-    </tbody>
-  </table>
+<div class="container">
+  <div *ngIf="driversList.length > 0">
+    <app-driver-pie-chart [driverlist]="driversList"></app-driver-pie-chart>
+  </div>
+
+  <h2 class="my-4 text-center">List of Drivers</h2>
+
+  <div class="text-center my-3">
+    <button class="btn btn-success" (click)="exportToExcel()">Export Data</button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>RFID</th>
+          <th>Current Route</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Address</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let driver of driversList">
+          <td>{{ driver.rf_id }}</td>
+          <td>{{ driver.assignedRoute }}</td>
+          <td>{{ driver.username }}</td>
+          <td>{{ driver.email }}</td>
+          <td>{{ driver.contact }}</td>
+          <td>{{ driver.address1 }}, {{ driver.address2 }}, {{ driver.pincode }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

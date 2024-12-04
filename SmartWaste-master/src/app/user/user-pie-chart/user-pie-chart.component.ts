@@ -64,7 +64,7 @@ export class UserPieChartComponent implements OnChanges {
         },
         series: [{
           type: 'pie',
-          name: 'Waste Data',
+          name: 'User Data',
           data: [{
             name: 'Wet Waste',
             y: this.userData.wet,

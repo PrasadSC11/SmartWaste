@@ -18,8 +18,17 @@
             <li><a class="dropdown-item" (click)="toggle(4)">New Route</a></li>
           </ul>
         </div>
-
-        <button class="nav-link btn" (click)="toggle(2)">User</button>
+        <div class="nav-item dropdown">
+          <button class="nav-link btn dropdown-toggle" type="button" id="driverDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            User
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="driverDropdown">
+            <li><a class="dropdown-item" (click)="toggle(2)">User List</a></li>
+            <li><a class="dropdown-item" (click)="toggle(8)">New Area</a></li>
+          </ul>
+        </div>
+        <!-- <button class="nav-link btn" (click)="toggle(2)">User</button> -->
         <button class="nav-link btn" (click)="toggle(3)">Waste Picker</button>
 
         <div class="nav-item dropdown">
@@ -65,5 +74,8 @@
   </div>
   <div *ngIf="whatToShow == 7">
     <app-complaints [toggle1]="toggle1"></app-complaints>
+  </div>
+  <div *ngIf="whatToShow == 8">
+    <app-new-area></app-new-area>
   </div>
 </div>

@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { AppComponent } from '../app.component';
 import { WastePickerService } from '../service/wastepicker.service';
 import { isPlatformBrowser } from '@angular/common';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-wastepicker',
@@ -31,5 +33,15 @@ export class WastepickerComponent implements OnInit {
       this.wastePickersList = data;
       this.wastePickerService.setWastePickers(data);
     });
+  }
+  exportToExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.wastePickersList);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'WastePickers');
+
+    // Generate the Excel file and prompt download
+    const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(data, 'WastePickersData.xlsx');
   }
 }

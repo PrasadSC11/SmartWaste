@@ -1,27 +1,48 @@
-<div class="text-center mb-3">
-  <button (click)="switchData('weekly')" class="btn btn-primary me-2">Weekly</button>
-  <button (click)="switchData('monthly')" class="btn btn-primary">Monthly</button>
-</div>
+<div class="container">
+  <div class="form-group mb-3">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="dataType" class="form-label">Select Export Type</label>
+        <select id="dataType" class="form-select" [(ngModel)]="selectedDataType">
+          <option value="user">User</option>
+          <option value="driver">Driver</option>
+          <option value="wastePicker">Waste Picker</option>
+        </select>
+      </div>
+    </div>
+  </div>
 
-<div class="row">
-  <div class="col-md-4">
-    <div class="card" style="margin-left: 20px;">
-      <div class="card-body">
-        <div [chart]="userPieChart"></div>
-      </div>
+  <div class="d-flex justify-content-between mb-4">
+    <button class="btn btn-primary" (click)="generateReport(selectedDataType)">Export</button>
+    <div>
+      <button (click)="switchData('weekly')" class="btn btn-outline-primary me-2">Weekly</button>
+      <button (click)="switchData('monthly')" class="btn btn-outline-primary">Monthly</button>
     </div>
   </div>
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-body">
-        <div [chart]="wastePickerChart"></div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">User Data</h5> -->
+          <div [chart]="userPieChart"></div>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-4">
-    <div class="card"style="margin-right: 20px;">
-      <div class="card-body">
-        <div [chart]="driverPieChart"></div>
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">Waste Picker Data</h5> -->
+          <div [chart]="wastePickerChart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <!-- <h5 class="card-title text-center">Driver Data</h5> -->
+          <div [chart]="driverPieChart"></div>
+        </div>
       </div>
     </div>
   </div>
