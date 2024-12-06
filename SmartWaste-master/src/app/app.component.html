@@ -42,6 +42,8 @@
             <li><a class="dropdown-item" (click)="toggle(6)">WastePicker</a></li>
           </ul>
         </div>
+        <button class="nav-link btn" (click)="toggle(9)">Donations</button>
+
       </div>
       <div *ngIf="isMenuOpen" class="navbar-nav d-flex align-items-center ms-auto">
         <button class="nav-link btn" (click)="toggleMenu()">Cancel</button>
@@ -77,5 +79,8 @@
   </div>
   <div *ngIf="whatToShow == 8">
     <app-new-area></app-new-area>
+  </div>
+  <div *ngIf="whatToShow == 9">
+    <app-donation></app-donation>
   </div>
 </div>

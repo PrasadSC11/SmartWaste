@@ -13,6 +13,9 @@
         <tr>
           <th>RFID</th>
           <th>Current Area</th>
+          <th>Date</th>
+          <th>Dry</th>
+          <th>Wet</th>
           <th>Username</th>
           <th>Email</th>
           <th>Contact</th>
@@ -23,6 +26,9 @@
         <tr *ngFor="let data of wastePickersList">
           <td>{{ data.rf_id }}</td>
           <td>{{ data.area }}</td>
+          <td>{{ data.date }}</td>
+          <td>{{ data.dry }}</td>
+          <td>{{ data.wet }}</td>
           <td>{{ data.username }}</td>
           <td>{{ data.email }}</td>
           <td>{{ data.contact }}</td>

@@ -16,6 +16,15 @@ import { DriverPieChartComponent } from './driver/driver-pie-chart/driver-pie-ch
 import { HighchartsChartModule } from 'highcharts-angular';
 import { WastepickerPieChartComponent } from './wastepicker/wastepicker-pie-chart/wastepicker-pie-chart.component';
 import { NewAreaComponent } from './user/new-area/new-area.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { matFormFieldAnimations } from '@angular/material/form-field';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+ import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {provideNativeDateAdapter} from '@angular/material/core';
+import { DonationComponent } from './dashboard/donation/donation.component';
 
 @NgModule({
   declarations: [
@@ -30,17 +39,20 @@ import { NewAreaComponent } from './user/new-area/new-area.component';
     DriverPieChartComponent,
     WastepickerPieChartComponent,
     NewAreaComponent,
+    DonationComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
+    HttpClientModule,MatFormFieldModule, MatInputModule, MatDatepickerModule,
+    FormsModule,MatNativeDateModule,
     HighchartsChartModule,
     ReactiveFormsModule,
     ChartModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

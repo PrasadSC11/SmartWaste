@@ -1,7 +1,7 @@
 <div class="container">
   <div class="form-group mb-3">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <label for="dataType" class="form-label">Select Export Type</label>
         <select id="dataType" class="form-select" [(ngModel)]="selectedDataType">
           <option value="user">User</option>
@@ -11,7 +11,12 @@
       </div>
     </div>
   </div>
-
+  <mat-form-field>
+    <mat-label>Export from date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
   <div class="d-flex justify-content-between mb-4">
     <button class="btn btn-primary" (click)="generateReport(selectedDataType)">Export</button>
     <div>
@@ -24,7 +29,6 @@
     <div class="col-md-4">
       <div class="card h-100">
         <div class="card-body">
-          <!-- <h5 class="card-title text-center">User Data</h5> -->
           <div [chart]="userPieChart"></div>
         </div>
       </div>
@@ -32,7 +36,6 @@
     <div class="col-md-4">
       <div class="card h-100">
         <div class="card-body">
-          <!-- <h5 class="card-title text-center">Waste Picker Data</h5> -->
           <div [chart]="wastePickerChart"></div>
         </div>
       </div>
@@ -40,7 +43,6 @@
     <div class="col-md-4">
       <div class="card h-100">
         <div class="card-body">
-          <!-- <h5 class="card-title text-center">Driver Data</h5> -->
           <div [chart]="driverPieChart"></div>
         </div>
       </div>

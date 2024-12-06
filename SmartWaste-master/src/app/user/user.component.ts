@@ -13,6 +13,9 @@ interface User {
   address1: string;
   address2: string;
   pincode: string;
+  date:string;
+  dry:string;
+  wet:string;
 }
 
 @Component({

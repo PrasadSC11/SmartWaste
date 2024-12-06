@@ -99,7 +99,7 @@ export class DriverPieChartComponent implements OnChanges {
     }
 
     this.selectedDriver = this.driverlist.find(driver => driver.rf_id === this.searchRfid) || undefined;
-
+this.loadDriverData();
     if (!this.selectedDriver) {
       this.validationMessage = 'No driver found with the given RFID.';
     }
