@@ -75,28 +75,17 @@ export class DashboardComponent {
     });
   }
   downloadReport(data: any[], filename: string) {
-    // Step 1: Sanitize the data
     const sanitizedData = data.map(row =>
       row.map((cell: { toString: () => any; } | null | undefined) => (cell !== null && cell !== undefined) ? cell.toString() : '')
     );
-
-    // Step 2: Create the worksheet
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(sanitizedData);
-
-    // Step 3: Explicitly set worksheet properties to avoid protection
     if (ws['!protect']) {
       delete ws['!protect'];
     }
-
-    // Step 4: Create the workbook and append the sheet
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Data');
-
-    // Step 5: Write workbook to buffer and set correct MIME type
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
     const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-
-    // Step 6: Trigger download
     saveAs(blob, filename);
   }
 
