@@ -79,13 +79,11 @@ export class DashboardComponent {
       row.map((cell: { toString: () => any; } | null | undefined) => (cell !== null && cell !== undefined) ? cell.toString() : '')
     );
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(sanitizedData);
-    if (ws['!protect']) {
-      delete ws['!protect'];
-    }
+   
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Data');
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(blob, filename);
   }
 
