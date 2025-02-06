@@ -34,7 +34,7 @@ export class DriverPieChartComponent implements OnChanges {
   validationMessage: string = '';
 
   constructor(private http: HttpClient, private app: AppComponent, @Inject(PLATFORM_ID) private platformId: Object) {
-    this.loadDriverData();
+
     this.loadRoutes();
   }
 
@@ -42,17 +42,18 @@ export class DriverPieChartComponent implements OnChanges {
     if (changes['driverlist'] && this.driverlist.length > 0) {
       this.firstDriver = this.driverlist[0];
       this.selectedDriver = this.firstDriver;
+      if (this.selectedDriver) {
+        this.loadDriverData(this.selectedDriver.uid, this.selectedDriver.rf_id);
+      }
     }
   }
-
-  loadDriverData() {
-    const url = `${this.app.baseUrl}driverLiveData`;
+  loadDriverData(uid: string, rf_id: string) {
+    const url = `${this.app.baseUrl}driverLiveData/${uid}/${rf_id}`;
     this.http.get(url).subscribe((data) => {
       this.driverData = data;
       this.createDriverChart();
     });
   }
-
   createDriverChart() {
     if (this.driverData) {
       this.driverChart = new Chart({
@@ -77,14 +78,10 @@ export class DriverPieChartComponent implements OnChanges {
           type: 'pie',
           name: 'Waste Data',
           data: [{
-            name: 'Wet Waste',
-            y: this.driverData.wet,
+            name: 'Level',
+            y: this.driverData.level,
             color: '#3498db',
-          }, {
-            name: 'Dry Waste',
-            y: this.driverData.dry,
-            color: '#e74c3c',
-          }]
+          } ]
         }]
       });
     }
@@ -99,7 +96,9 @@ export class DriverPieChartComponent implements OnChanges {
     }
 
     this.selectedDriver = this.driverlist.find(driver => driver.rf_id === this.searchRfid) || undefined;
-this.loadDriverData();
+    if (this.selectedDriver) {
+      this.loadDriverData(this.selectedDriver.uid, this.selectedDriver.rf_id);
+    }
     if (!this.selectedDriver) {
       this.validationMessage = 'No driver found with the given RFID.';
     }
@@ -131,7 +130,9 @@ this.loadDriverData();
   }
 
   assignRoute() {
-    const url = `${this.app.baseUrl}assignRoute/${this.selectedDriver.id}`;
+    console.log(this.selectedDriver);
+    
+    const url = `${this.app.baseUrl}assignRoute/${this.selectedDriver.uid}`;
     this.http.put(url, this.selectedRoute.routeId).subscribe((data: any) => {
       this.selectedDriver.assignedRoute = `${this.selectedRoute.startingPoint} to ${this.selectedRoute.endingPoint}`;
     });

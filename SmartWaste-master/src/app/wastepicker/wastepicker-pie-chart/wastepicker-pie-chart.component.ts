@@ -21,18 +21,21 @@ export class WastepickerPieChartComponent implements OnChanges {
   areaList: any[] = [];
 
   constructor(private http: HttpClient, private app: AppComponent, @Inject(PLATFORM_ID) private platformId: Object) {
-    this.loadUserData();
+
     this.loadAreas();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['wastePickersList'] && this.wastePickersList.length > 0) {
       this.selectedUser = this.wastePickersList[0];
+      if (this.selectedUser) {
+        this.loadUserData(this.selectedUser.uid, this.selectedUser.rf_id);
+      }
     }
   }
 
-  loadUserData() {
-    const url = `${this.app.baseUrl}userLiveData`;
+  loadUserData(uid: string, rf_id: string) {
+    const url = `${this.app.baseUrl}userLiveData/${uid}/${rf_id}`;
     this.http.get(url).subscribe((data) => {
       this.userData = data;
       this.createChart();
@@ -77,7 +80,9 @@ export class WastepickerPieChartComponent implements OnChanges {
     }
 
     this.selectedUser = this.wastePickersList.find((user) => user.rf_id === this.searchRfid) || null;
-
+    if (this.selectedUser) {
+      this.loadUserData(this.selectedUser.uid, this.selectedUser.rf_id);
+    }
     if (!this.selectedUser) {
       this.validationMessage = 'No user found with the given RFID.';
     }

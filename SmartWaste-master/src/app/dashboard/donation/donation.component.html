@@ -3,18 +3,24 @@
         <table class="table table-striped table-bordered table-hover">
             <thead class="table-light">
                 <tr>
-                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Contact no</th>
                     <th>Type</th>
                     <th>Weight</th>
                     <th>Description</th>
+                    <th>Address</th>
+                    <th>User ID</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let complaint of donations">
-                    <td>{{ complaint.uid }}</td>
+                    <td>{{ complaint.userName }}</td>
+                    <td>{{ complaint.contact }}</td>
                     <td>{{ complaint.type }}</td>
                     <td>{{ complaint.weight }}</td>
                     <td>{{ complaint.description }}</td>
+                    <td>{{ complaint.address }}</td>
+                    <td>{{ complaint.uid }}</td>
                 </tr>
             </tbody>
         </table>

@@ -38,7 +38,6 @@ export class NewAreaComponent {
     this.http.get<any[]>(url).subscribe({
       next: (data) => {
         this.areas = data; // Populate the table
-        console.log('Areas fetched successfully:', data);
       },
       error: (err) => {
         console.error('Error fetching areas:', err);
@@ -95,7 +94,6 @@ export class NewAreaComponent {
     const url = `${this.app.baseUrl}addArea`;
     this.http.post(url, this.dataForm.value).subscribe({
       next: () => {
-        console.log('Area added successfully.');
         this.fetchAreas(); // Refresh the list
         this.closeModal();
       },
@@ -110,7 +108,6 @@ export class NewAreaComponent {
     const url = `${this.app.baseUrl}updateArea`;
     this.http.put(url, this.dataForm.value).subscribe({
       next: () => {
-        console.log('Area updated successfully.');
         this.fetchAreas(); // Refresh the list
         this.closeModal();
       },

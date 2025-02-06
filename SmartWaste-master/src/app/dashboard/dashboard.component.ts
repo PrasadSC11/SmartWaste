@@ -17,10 +17,104 @@ export class DashboardComponent {
   colorMapping: any = {};
   dataForExport: any = [];
   selectedDate: Date | null = null;
-  selectedDataType: string = 'user';
+  [key: string]: any;
+  routesList: any = [];
+  selectedRoute: any = '';
+  selectedRouteDetails: any;
+  activeUsers: any;
+  activeDrivers: any;
+  activeWastePickers: any;
+  activeCount: number = 0;
+  totalCount: number = 0;
+  cards = [
+    { title: 'Users', count: 0, total: 0 },
+    { title: 'Drivers', count: 0, total: 0 },
+    { title: 'Waste', count: 0, total: 0 }
+  ];
+  selectedFile: File | null = null;
+  uploadMessage: string | null = null;
+  uploadSuccess: boolean = false;
 
   constructor(private http: HttpClient, private app: AppComponent) {
     this.loadDriverAndUserData('monthly');
+    this.getAllRoutes();
+    this.fetchActiveData('Users');
+    this.fetchActiveData('Drivers');
+    this.fetchActiveData('Waste');
+  }
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      this.uploadMessage = null; // Reset message
+    }
+  }
+
+  // Upload file
+  uploadFile(): void {
+    if (!this.selectedFile) {
+      this.uploadMessage = 'No file selected!';
+      this.uploadSuccess = false;
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+    const uploadUrl = 'http://localhost:8080/api/uploadOldData'; // Backend API endpoint
+
+    this.http.post(uploadUrl, formData, { responseType: 'text' }).subscribe({
+      next: (response: string) => {
+        this.uploadMessage = response;
+        this.uploadSuccess = true;
+      },
+      error: (error) => {
+        this.uploadMessage = `Upload failed`;
+        this.uploadSuccess = false;
+      }
+    });
+  }
+
+
+  // Generic function to fetch active data
+  fetchActiveData(type: string): void {
+    const url = `${this.app.baseUrl}active${type}`;
+
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        // Update the active and total counts dynamically
+        this[`active${type}`] = data;
+
+        const card = this.cards.find(card => card.title === type);
+        if (card) {
+          card.count = data[1]; // Active count
+          card.total = data[0]; // Total count
+        } else {
+          console.warn(`Card with title "${type}" not found`);
+        }
+      },
+      error: (err) => {
+        console.error(`Error fetching active${type} data`, err);
+      }
+    });
+  }
+
+  getAllRoutes() {
+    const url = `${this.app.baseUrl}getAllRoutes`;
+    this.http.get(url).subscribe({
+      next: (data: any) => {
+        this.routesList = data;
+      },
+      error: (err) => console.error('Error fetching data', err)
+    });
+  }
+
+  showRouteDetails() {
+    const route = this.routesList.find((r: any) => r.routeId === this.selectedRoute);
+    if (route) {
+      this.selectedRouteDetails = route;
+    } else {
+      console.error('Route not found!');
+    }
   }
 
   private formatDate(date: Date): string {
@@ -29,57 +123,92 @@ export class DashboardComponent {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-
-  generateReport(dataType: string) {
+  generateReport(route: any) {
     if (!this.selectedDate) {
       alert('Please select a date!');
       return;
     }
 
     const formattedDate = this.formatDate(this.selectedDate);
-    let url = '';
+    const url = `${this.app.baseUrl}getDailyDataOfUsers?date=${encodeURIComponent(formattedDate)}&routeId=${encodeURIComponent(route.routeId)}`;
 
-    switch (dataType) {
-      case 'user':
-        url = `${this.app.baseUrl}getUsersDailyData/${formattedDate}`;
-        break;
-      case 'driver':
-        url = `${this.app.baseUrl}getDriverDailyData/${formattedDate}`;
-        break;
-      case 'wastePicker':
-        url = `${this.app.baseUrl}getWastePickersDailyData/${formattedDate}`;
-        break;
-      default:
-        alert('Invalid data type selected!');
-        return;
-    }
     this.http.get(url).subscribe({
       next: (data: any) => {
-        console.log(data);
-        const name = data[0]?.userName?.split('@')[1] || 'Unknown';
-        const headerRow = [`Name: ${name}`];
-        const columnHeaders = ['Sr.No', 'User Name', 'User Id', 'Date', 'Dry Total', 'Wet Total'];
-        const dataRows = data.map((item: any, index: number) => [
-          index + 1,
-          item.userName.split('@')[0],
-          name,
-          item.date,
-          item.dry + "kg",
-          item.wet + "kg"
-        ]);
-        const dataWithHeader = [headerRow, columnHeaders, ...dataRows];
-        this.dataForExport = dataWithHeader;
-        this.downloadReport(dataWithHeader, `${dataType}_report.xlsx`);
+        if (!data || data.length === 0) {
+          alert('No data available for the selected date!');
+          return;
+        }
+
+        // Collect all unique donation types and initialize data structure
+        const donationTypes = new Set<string>();
+        const dataRows = data.map((item: any) => {
+          const weights: { [type: string]: number } = {};
+          if (item.userName) {
+            const entries = item.userName.split(';'); // Assuming multiple types are separated by ";"
+            entries.forEach((entry: string) => {
+              const [type, weight] = entry.split('@');
+              if (type && weight) {
+                donationTypes.add(type);
+                weights[type] = parseFloat(weight) || 0;
+              }
+            });
+          }
+
+          return {
+            address: item.address || 'N/A',
+            area: item.area || 'N/A',
+            contact: item.contact || 'N/A',
+            date: item.date || 'N/A',
+            dry: item.dry || 0,
+            wet: item.wet || 0,
+            uid: item.uid || 'N/A',
+            user: item.user || 'N/A',
+            weights,
+          };
+        });
+
+        // Create dynamic headers
+        const baseHeaders = ['Date', 'User', 'Contact', 'Address', 'Area', 'UID', 'Dry Waste (kg)', 'Wet Waste (kg)'];
+        const dynamicHeaders = Array.from(donationTypes);
+        const headerRow = [...baseHeaders, ...dynamicHeaders];
+
+        // Prepare rows for the report
+        const reportRows = dataRows.map((row: { date: any; user: any; contact: any; address: any; area: any; uid: any; dry: any; wet: any; weights: { [x: string]: any; }; }) => {
+          const rowData = [
+            row.date,
+            row.user,
+            row.contact,
+            row.address,
+            row.area,
+            row.uid,
+            row.dry,
+            row.wet,
+            ...dynamicHeaders.map((type) => row.weights[type] || 0),
+          ];
+          return rowData;
+        });
+
+        // Include Route ID as a header
+        const headerRoute = [`Route : ${route.startingPoint} to ${route.endingPoint}`];
+
+        // Combine all rows into the final report
+        const reportData = [headerRoute, [], headerRow, ...reportRows];
+
+        // Trigger the download
+        this.downloadReport(reportData, `Report_${route.startingPoint}_To_${route.endingPoint}_${formattedDate}.xlsx`);
       },
-      error: (err) => console.error('Error fetching data', err)
+      error: (err) => {
+        console.error('Error fetching data', err);
+        alert('An error occurred while fetching data. Please try again later.');
+      },
     });
   }
+
   downloadReport(data: any[], filename: string) {
     const sanitizedData = data.map(row =>
-      row.map((cell: { toString: () => any; } | null | undefined) => (cell !== null && cell !== undefined) ? cell.toString() : '')
+      row.map((cell: any) => (cell !== null && cell !== undefined) ? cell.toString() : '')
     );
     const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(sanitizedData);
-   
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Data');
     const excelBuffer: any = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
@@ -98,6 +227,8 @@ export class DashboardComponent {
 
     this.http.get(driverUrl).subscribe({
       next: (driverData: any) => {
+        console.log(driverData);
+        
         const groupedData = this.groupDataById(driverData);
         this.driverPieChart = this.createPieChart(groupedData, 'Driver Data');
       },
@@ -105,7 +236,7 @@ export class DashboardComponent {
     });
 
     this.http.get(userUrl).subscribe({
-      next: (userData: any) => {
+      next: (userData: any) => { console.log(userData);
         const groupedData = this.groupDataById(userData);
         this.userPieChart = this.createPieChart(groupedData, 'User Data');
       },
@@ -113,7 +244,7 @@ export class DashboardComponent {
     });
 
     this.http.get(wastePickerUrl).subscribe({
-      next: (wastePickerData: any) => {
+      next: (wastePickerData: any) => { console.log(wastePickerData);
         const groupedData = this.groupDataById(wastePickerData);
         this.wastePickerChart = this.createPieChart(groupedData, 'Waste Picker Data');
       },
@@ -150,6 +281,9 @@ export class DashboardComponent {
         name: 'Total',
         data: chartData
       }],
+      accessibility: {
+        enabled: false,
+      },
       responsive: {
         rules: [{
           condition: { maxWidth: 600 },

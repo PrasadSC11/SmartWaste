@@ -6,6 +6,9 @@
       <thead class="table-light">
         <tr>
           <th>User ID</th>
+          <th>User Name</th>
+          <th> Contect no</th>
+          <th> Address</th>
           <th>Time</th>
           <th>Category</th>
           <th>Description</th>
@@ -14,6 +17,9 @@
       <tbody>
         <tr *ngFor="let complaint of complaints">
           <td>{{ complaint.uid }}</td>
+          <td>{{ complaint.userName }}</td>
+          <td>{{ complaint.contact }}</td>
+          <td>{{ complaint.address }}</td>
           <td>{{ complaint.formattedTime }}</td>
           <td>{{ complaint.category }}</td>
           <td>{{ complaint.description }}</td>

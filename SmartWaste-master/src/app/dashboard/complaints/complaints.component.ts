@@ -11,11 +11,10 @@ export class ComplaintsComponent implements OnInit {
   complaints: any[] = []; // Combined complaints array
   @Input() toggle1: any;
 
-  constructor(private http: HttpClient, private app: AppComponent) {}
+  constructor(private http: HttpClient, private app: AppComponent) { }
 
   ngOnInit(): void {
     if (this.toggle1) {
-      console.log(this.toggle1);
       this.loadComplaints();
     }
   }

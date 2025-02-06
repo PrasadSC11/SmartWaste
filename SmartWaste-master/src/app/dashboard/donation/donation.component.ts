@@ -17,6 +17,7 @@ export class DonationComponent {
     url = `${this.app.baseUrl}getAllDonations`;
     this.http.get(url).subscribe((data: any) => {
       this.donations = data;
+      console.log(this.donations)
     });
   }
 }

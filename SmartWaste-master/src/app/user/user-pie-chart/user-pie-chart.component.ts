@@ -11,6 +11,7 @@ interface User {
   email: string;
   contact: string;
   address1: string;
+  uid: string;
   address2: string;
   pincode: string;
 }
@@ -26,23 +27,24 @@ export class UserPieChartComponent implements OnChanges {
   selectedUser: User | undefined;
   userData: any;
   searchRfid: string = '';
-  validationMessage: string = ''; 
+  validationMessage: string = '';
 
   chart!: Chart;
 
   constructor(private http: HttpClient, private app: AppComponent) {
-    this.loadUserData();
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userlist'] && this.userlist.length > 0) {
       this.firstUser = this.userlist[0];
       this.selectedUser = this.firstUser;
+      this.loadUserData(this.selectedUser.uid, this.selectedUser.rf_id);
     }
   }
 
-  loadUserData() {
-    const url = `${this.app.baseUrl}userLiveData`;
+  loadUserData(uid: string, rf_id: string) {
+    const url = `${this.app.baseUrl}userLiveData/${uid}/${rf_id}`;
     this.http.get(url).subscribe((data) => {
       this.userData = data;
       this.createChart();
@@ -80,7 +82,7 @@ export class UserPieChartComponent implements OnChanges {
   }
 
   searchUser() {
-    this.validationMessage = ''; 
+    this.validationMessage = '';
 
     if (!this.searchRfid) {
       this.validationMessage = 'RFID cannot be empty.';
@@ -88,7 +90,9 @@ export class UserPieChartComponent implements OnChanges {
     }
 
     this.selectedUser = this.userlist.find(user => user.rf_id === this.searchRfid) || undefined;
-
+    if (this.selectedUser) {
+      this.loadUserData(this.selectedUser.uid, this.selectedUser.rf_id);
+    }
     if (!this.selectedUser) {
       this.validationMessage = 'No user found with the given RFID.';
     }
